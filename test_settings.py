@@ -70,7 +70,7 @@ HELPER_SETTINGS = {
     # until session engine is hardcoded in djangocms-helper use
     # @override_settings in your test cases.
     'SESSION_ENGINE': 'django.contrib.sessions.backends.cached_db',
-    'MIDDLEWARE_CLASSES': [
+    'MIDDLEWARE': [
         # NOTE: This will actually be removed below in CMS<3.2 installs.
         'cms.middleware.utils.ApphookReloadMiddleware',
         'django.middleware.http.ConditionalGetMiddleware',
@@ -103,9 +103,9 @@ HELPER_SETTINGS = {
 # use aldryn_apphook_reload's.
 if cms_version < LooseVersion('3.2.0'):
     HELPER_SETTINGS['INSTALLED_APPS'].insert(0, 'aldryn_apphook_reload')
-    HELPER_SETTINGS['MIDDLEWARE_CLASSES'].remove(
+    HELPER_SETTINGS['MIDDLEWARE'].remove(
         'cms.middleware.utils.ApphookReloadMiddleware')
-    HELPER_SETTINGS['MIDDLEWARE_CLASSES'].insert(
+    HELPER_SETTINGS['MIDDLEWARE'].insert(
         0, 'aldryn_apphook_reload.middleware.ApphookReloadMiddleware')
 
 

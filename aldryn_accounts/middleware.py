@@ -8,6 +8,12 @@ from .utils import geoip
 
 
 class TimezoneMiddleware(object):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        return self.get_response(request)
+
     def process_request(self, request):
         tz = request.session.get('django_timezone')
         if tz:
@@ -23,6 +29,12 @@ class GeoIPMiddleware(object):
     """
     Still experimental
     """
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        return self.get_response(request)
+
     def process_request(self, request):
         ip = request.META.get('HTTP_X_REAL_IP') or request.META.get('REMOTE_ADDR') or None
         # ip = '67.2.2.25'

@@ -8,7 +8,7 @@ from django.contrib.messages import get_messages
 
 from django.core import mail
 from django.test import  override_settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import unittest
 from django.utils.translation import override
 

@@ -6,7 +6,7 @@ import string
 import sys
 
 from django.conf import settings
-from django.core.urlresolvers import clear_url_caches
+from django.urls import clear_url_caches
 from django.core.cache import cache
 
 from cms import api

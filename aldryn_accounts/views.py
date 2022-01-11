@@ -19,9 +19,8 @@ from django.contrib import messages, auth
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core import urlresolvers
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
@@ -75,7 +74,7 @@ class SignupView(FormView):
         super(SignupView, self).__init__(*args, **kwargs)
 
     def get(self, *args, **kwargs):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             return redirect(default_redirect(self.request, settings.ALDRYN_ACCOUNTS_LOGIN_REDIRECT_URL))
         if not self.is_open():
             return self.closed()
@@ -238,7 +237,7 @@ class SignupEmailResendConfirmationView(FormView):
 
     def get_success_url(self):
         email = self._get_email()
-        url = reverse('aldryn_accounts:accounts_signup_email_confirmation_sent')
+        url = reverse('accounts_signup_email_confirmation_sent')
         url += '?' + urlencode({'email': email})
         return url
 
@@ -258,7 +257,7 @@ class SignupEmailResendConfirmationView(FormView):
     def form_invalid(self, form):
         # This shouldn't happen unless someone was tampering with the email parameter
         # or somehow managed to have invalid email in the database
-        return HttpResponseRedirect(reverse('aldryn_accounts:accounts_signup'))
+        return HttpResponseRedirect(reverse('accounts_signup'))
 
 
 class SignupEmailConfirmationSentView(TemplateView):
@@ -313,7 +312,7 @@ class LogoutView(class_based_auth_views.views.LogoutView):
 
 def password_reset(request, *args, **kwargs):
     kwargs.update({
-        'post_reset_redirect': 'aldryn_accounts:password_reset_done',
+        'post_reset_redirect': 'password_reset_done',
         'template_name': 'aldryn_accounts/reset/password_reset_form.html',
         'email_template_name': 'aldryn_accounts/reset/password_reset_email.html',
         'subject_template_name': 'aldryn_accounts/reset/password_reset_subject.txt',
@@ -332,7 +331,7 @@ def password_reset_done(request, *args, **kwargs):
 def password_reset_confirm(request, *args, **kwargs):
     kwargs.update({
         'template_name': 'aldryn_accounts/reset/password_reset_confirm.html',
-        'post_reset_redirect': 'aldryn_accounts:password_reset_complete',
+        'post_reset_redirect': 'password_reset_complete',
     })
     return auth_views.password_reset_confirm(request, *args, **kwargs)
 
@@ -398,7 +397,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
         return ctx
 
     def get_redirect_url(self):
-        return urlresolvers.reverse(settings.EMAIL_CONFIRMATION_REDIRECT_URL)
+        return reverse(settings.EMAIL_CONFIRMATION_REDIRECT_URL)
 
     def has_successfully_confirmed(self, confirmation):
         """
@@ -438,7 +437,7 @@ class ChangePasswordBaseView(FormView):
     }
 
     def post(self, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseForbidden()
         return super(ChangePasswordBaseView, self).post(*args, **kwargs)
 
@@ -469,7 +468,7 @@ class ChangePasswordBaseView(FormView):
 
     def form_valid(self, form):
         self.change_password(form)
-        return redirect(self.get_success_url())
+        return redirect(reverse('accounts_change_password'))
 
     def get_context_data(self, **kwargs):
         ctx = super(ChangePasswordBaseView, self).get_context_data(**kwargs)
@@ -505,7 +504,7 @@ class ChangePasswordView(ChangePasswordBaseView):
             request, *args, **kwargs)
 
     def get(self, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return redirect("accounts_password_reset_recover")
         if not self.request.user.has_usable_password():
             return redirect("accounts_create_password")
@@ -519,7 +518,7 @@ class CreatePasswordView(ChangePasswordBaseView):
     def dispatch(self, request, *args, **kwargs):
         if request.user.has_usable_password():
             # user who already have a password must use ChangePasswordView
-            return redirect(urlresolvers.reverse('aldryn_accounts:accounts_change_password'))
+            return redirect(reverse('accounts_change_password'))
         else:
             return super(CreatePasswordView, self).dispatch(request, *args, **kwargs)
 
@@ -558,7 +557,7 @@ class ProfileEmailListView(OnlyOwnedObjectsMixin, ListView):
         return redirect(self.get_success_url())
 
     def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
+        return reverse('accounts_email_list')
 
     def get_context_data(self, **kwargs):
         context = super(ProfileEmailListView, self).get_context_data(**kwargs)
@@ -595,7 +594,7 @@ class ProfileEmailConfirmationResendView(OnlyOwnedObjectsMixin, DetailView):
         return redirect(self.get_success_url())
 
     def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
+        return reverse('accounts_email_list')
 
 
 class ProfileEmailConfirmationCancelView(OnlyOwnedObjectsMixin, DeleteView):
@@ -607,7 +606,7 @@ class ProfileEmailConfirmationCancelView(OnlyOwnedObjectsMixin, DeleteView):
         return super(ProfileEmailConfirmationCancelView, self).dispatch(*args, **kwargs)
 
     def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
+        return reverse('accounts_email_list')
 
 
 class ProfileEmailMakePrimaryView(OnlyOwnedObjectsMixin, UpdateView):
@@ -626,7 +625,7 @@ class ProfileEmailMakePrimaryView(OnlyOwnedObjectsMixin, UpdateView):
         return MiniForm
 
     def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
+        return reverse('accounts_email_list')
 
     def form_valid(self, form):
         self.object.set_as_primary()
@@ -642,7 +641,7 @@ class ProfileEmailDeleteView(OnlyOwnedObjectsMixin, DeleteView):
         return super(ProfileEmailDeleteView, self).dispatch(*args, **kwargs)
 
     def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
+        return reverse('accounts_email_list')
 
     def get_queryset(self):
         # don't allow deleting the primary email address
@@ -659,7 +658,7 @@ class UserSettingsView(UpdateView):
         return super(UserSettingsView, self).dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
-        if self.request.user.is_anonymous():
+        if not self.request.user.is_authenticated:
             raise PermissionDenied()
         if queryset is None:
             queryset = self.get_queryset()
@@ -673,4 +672,4 @@ class UserSettingsView(UpdateView):
         return kwargs
 
     def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_profile')
+        return reverse('accounts_profile')

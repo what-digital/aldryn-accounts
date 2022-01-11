@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.core.urlresolvers import NoReverseMatch
+from django.urls import NoReverseMatch
 from django.template.loader import render_to_string
 
 
@@ -19,7 +19,7 @@ class Notification(object):
 def check_notifications(user):
     # TODO: caching/optimisation
     notifications = []
-    if user.is_anonymous():
+    if not user.is_authenticated:
         return []
     if DISPLAY_EMAIL_NOTIFICATION:
         email_notification = check_email_verification(user)

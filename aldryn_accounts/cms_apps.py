@@ -10,22 +10,32 @@ from . import urls_i18n
 
 class AldrynAccountsUserProfileIndexApphook(CMSApp):
     name = _("user profile: index")
-    urls = [urls_i18n.profile_index_urlpatterns]
+
+    def get_urls(self, page=None, language=None, **kwargs):
+        return [urls_i18n.profile_index_urlpatterns]
+
 
 
 class AldrynAccountsUserProfileSettingsApphook(CMSApp):
     name = _("user profile: settings")
-    urls = [urls_i18n.profile_settings_urlpatterns]
+
+    def get_urls(self, page=None, language=None, **kwargs):
+        return [urls_i18n.profile_settings_urlpatterns]
+
 
 
 class AldrynAccountsUserProfileChangePasswordApphook(CMSApp):
     name = _("user profile: change password")
-    urls = [urls_i18n.change_password_urlpatterns]
+
+    def get_urls(self, page=None, language=None, **kwargs):
+        return [urls_i18n.change_password_urlpatterns]
 
 
 class AldrynAccountsUserProfileEmailSettingsApphook(CMSApp):
     name = _("user profile: E-Mail settings")
-    urls = [urls_i18n.email_settings_urlpatterns]
+
+    def get_urls(self, page=None, language=None, **kwargs):
+        return [urls_i18n.email_settings_urlpatterns]
 
 
 if settings.ALDRYN_ACCOUNTS_USE_PROFILE_APPHOOKS:

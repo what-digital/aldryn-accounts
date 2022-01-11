@@ -103,13 +103,13 @@ class AccountsAppConf(AppConf):
         # do auto configuration
         s = self._meta.holder
         # insert our middlewares after the session middleware
-        pos = s.MIDDLEWARE_CLASSES.index('django.contrib.sessions.middleware.SessionMiddleware') + 1
+        pos = s.MIDDLEWARE.index('django.contrib.sessions.middleware.SessionMiddleware') + 1
         for app in ADD_TO_INSTALLED_APPS:
             if app not in s.INSTALLED_APPS:
                 s.INSTALLED_APPS.append(app)
         for middleware in ADD_TO_MIDDLEWARE_CLASSES:
-            if not middleware in s.MIDDLEWARE_CLASSES:
-                s.MIDDLEWARE_CLASSES.insert(pos, middleware)
+            if not middleware in s.MIDDLEWARE:
+                s.MIDDLEWARE.insert(pos, middleware)
                 pos += 1
         # add social context processors if needed.
         if self.configured_data['USE_SOCIAL_CONTEXT_PROCESSORS']:

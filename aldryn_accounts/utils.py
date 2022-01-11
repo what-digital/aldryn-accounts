@@ -7,7 +7,13 @@ import importlib
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.utils.crypto import random
+
+#from django.utils.crypto import random
+import random
+try:
+    random = random.SystemRandom()
+except NotImplementedError:
+    pass
 
 import pygeoip
 
@@ -16,7 +22,7 @@ logger = logging.getLogger('aldryn_accounts')
 
 
 def user_display(user, fallback_to_username=settings.ALDRYN_ACCOUNTS_USER_DISPLAY_FALLBACK_TO_USERNAME, fallback_to_pk=settings.ALDRYN_ACCOUNTS_USER_DISPLAY_FALLBACK_TO_PK):
-    if user.is_anonymous():
+    if not user.is_authenticated:
         return u'Anonymous user'
     if user.email:
         return user.email

@@ -11,7 +11,7 @@ setup(
     author_email='developers@divio.ch',
     packages=find_packages(),
     install_requires=(
-        'Django>=1.6,<2.0',
+        'Django>=1.6',
         'django-annoying',
         'django-absolute',
         'django-appconf',
