@@ -318,14 +318,14 @@ def password_reset(request, *args, **kwargs):
         'subject_template_name': 'aldryn_accounts/reset/password_reset_subject.txt',
         'password_reset_form': PasswordRecoveryResetForm,
     })
-    return auth_views.password_reset(request, *args, **kwargs)
+    return auth_views.PasswordResetView.as_view()(request, *args, **kwargs)
 
 
 def password_reset_done(request, *args, **kwargs):
     kwargs.update({
         'template_name': 'aldryn_accounts/reset/password_reset_done.html',
     })
-    return auth_views.password_reset_done(request, *args, **kwargs)
+    return auth_views.PasswordResetDoneView.as_view()(request, *args, **kwargs)
 
 
 def password_reset_confirm(request, *args, **kwargs):
@@ -333,14 +333,14 @@ def password_reset_confirm(request, *args, **kwargs):
         'template_name': 'aldryn_accounts/reset/password_reset_confirm.html',
         'post_reset_redirect': 'password_reset_complete',
     })
-    return auth_views.password_reset_confirm(request, *args, **kwargs)
+    return auth_views.PasswordResetConfirmView.as_view()(request, *args, **kwargs)
 
 
 def password_reset_complete(request, *args, **kwargs):
     kwargs.update({
         'template_name': 'aldryn_accounts/reset/password_reset_complete.html',
     })
-    return auth_views.password_reset_complete(request, *args, **kwargs)
+    return auth_views.PasswordResetCompleteView.as_view()(request, *args, **kwargs)
 
 
 class ConfirmEmailView(TemplateResponseMixin, View):
