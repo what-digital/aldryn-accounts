@@ -392,8 +392,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
         return qs
 
     def get_context_data(self, **kwargs):
-        ctx = super(ConfirmEmailView, self).get_context_data(**kwargs)
-        ctx["confirmation"] = self.object
+        ctx = {"confirmation": self.object}
         return ctx
 
     def get_redirect_url(self):
