@@ -6,7 +6,7 @@ from .utils import get_most_qualified_user_for_email_and_password
 
 
 class EmailBackend(ModelBackend):
-    def authenticate(self, username=None, password=None):
+    def authenticate(self, request, username=None, password=None, **kwargs):
         """
         tries verified email addresses, the email field on user objects and unconfirmed email addresses.
         username is not checked, since the default model backend already does that.
