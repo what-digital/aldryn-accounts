@@ -135,6 +135,7 @@ class DefaultEmailSender(object):
                 site_name=site.name,
                 site_url=site_url,
                 support_email=settings.ALDRYN_ACCOUNTS_SUPPORT_EMAIL,
+                user=user,
             )
 
             emailit.api.send_mail(
