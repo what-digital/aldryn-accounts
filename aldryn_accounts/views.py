@@ -237,7 +237,7 @@ class SignupEmailResendConfirmationView(FormView):
 
     def get_success_url(self):
         email = self._get_email()
-        url = reverse('accounts_signup_email_confirmation_sent')
+        url = reverse('aldryn_accounts:accounts_signup_email_confirmation_sent')
         url += '?' + urlencode({'email': email})
         return url
 
@@ -467,7 +467,7 @@ class ChangePasswordBaseView(FormView):
 
     def form_valid(self, form):
         self.change_password(form)
-        return redirect(reverse('accounts_change_password'))
+        return redirect(reverse('aldryn_accounts:accounts_change_password'))
 
     def get_context_data(self, **kwargs):
         ctx = super(ChangePasswordBaseView, self).get_context_data(**kwargs)
@@ -517,7 +517,7 @@ class CreatePasswordView(ChangePasswordBaseView):
     def dispatch(self, request, *args, **kwargs):
         if request.user.has_usable_password():
             # user who already have a password must use ChangePasswordView
-            return redirect(reverse('accounts_change_password'))
+            return redirect(reverse('aldryn_accounts:accounts_change_password'))
         else:
             return super(CreatePasswordView, self).dispatch(request, *args, **kwargs)
 
