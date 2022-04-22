@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 
+
 try:
     from django.conf.urls import include, url
 except ImportError:
@@ -20,7 +21,7 @@ accounts_urlpatterns = [
 
     url(r'^password-reset/$', views.password_reset, name='accounts_password_reset_recover'),  # new name should be password_reset
     url(r'^password-reset/sent/$', views.password_reset_done, name='password_reset_done'),
-    url(r'^password-reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+    url(r'^password-reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$',
         views.password_reset_confirm, name='password_reset_confirm'),
     url(r'^password-reset/done/$', views.password_reset_complete, name='password_reset_complete'),
 
