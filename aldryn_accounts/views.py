@@ -463,7 +463,7 @@ class ChangePasswordBaseView(FormView):
 
     def form_valid(self, form):
         self.change_password(form)
-        return redirect(reverse('aldryn_accounts:accounts_change_password'))
+        return redirect(reverse('accounts_change_password'))
 
     def get_context_data(self, **kwargs):
         ctx = super(ChangePasswordBaseView, self).get_context_data(**kwargs)
