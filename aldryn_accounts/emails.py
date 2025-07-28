@@ -6,7 +6,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 from django.utils import timezone
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.http import urlencode
 from django.utils.module_loading import import_string
 from django.utils.translation import get_language, override
@@ -30,7 +30,7 @@ class DefaultEmailSender(object):
 
         return '{}://{}{}'.format(
             cls.get_protocol(),
-            force_text(site.domain),
+            force_str(site.domain),
             path,
         )
 

@@ -25,7 +25,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, TemplateView, ListView, DeleteView, UpdateView, View, DetailView
 from django.views.generic.base import TemplateResponseMixin
 from django.contrib.auth import views as auth_views

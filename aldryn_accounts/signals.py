@@ -2,7 +2,7 @@
 import django.dispatch
 from django.contrib.auth import user_logged_in
 from django.db.models import signals, ObjectDoesNotExist
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils import timezone
 from django.contrib.auth.models import User
 
@@ -30,7 +30,7 @@ def set_user_timezone_on_login(sender, user, request, **kwargs):
         return
 
     if tz:
-        request.session['django_timezone'] = force_text(tz)
+        request.session['django_timezone'] = force_str(tz)
         timezone.activate(tz)
 
 user_logged_in.connect(set_user_timezone_on_login, dispatch_uid='aldryn_accounts:set_user_timezone_on_login')
