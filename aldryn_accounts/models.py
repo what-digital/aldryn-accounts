@@ -13,7 +13,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.utils.encoding import python_2_unicode_compatible
 
 import timezone_field
 from annoying.fields import AutoOneToOneField
@@ -29,7 +28,6 @@ from .emails import EmailSender
 patch_user_unicode()
 
 
-@python_2_unicode_compatible
 class SignupCode(models.Model):
 
     class AlreadyExists(Exception):
@@ -158,7 +156,6 @@ class EmailAddressManager(models.Manager):
         return self.filter(user=user).exists()
 
 
-@python_2_unicode_compatible
 class EmailAddress(models.Model):
     """
     All verified email addresses. If it's not verified it should not be here.
@@ -225,7 +222,6 @@ class EmailConfirmationManager(models.Manager):
         return email_confirmation
 
 
-@python_2_unicode_compatible
 class EmailConfirmation(models.Model):
     user = models.ForeignKey(User, related_name="email_verifications")
     email = models.EmailField()
@@ -282,7 +278,6 @@ class EmailConfirmation(models.Model):
         )
 
 
-@python_2_unicode_compatible
 class UserSettings(models.Model):
     user = AutoOneToOneField(User, related_name='settings', unique=True, db_index=True)
     birth_date = models.DateField(_('birth date'), blank=True, null=True)
