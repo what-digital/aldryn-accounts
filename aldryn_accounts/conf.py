@@ -102,15 +102,28 @@ class AccountsAppConf(AppConf):
             return self.configured_data
         # do auto configuration
         s = self._meta.holder
+        
+        # Handle both MIDDLEWARE_CLASSES (Django < 1.10) and MIDDLEWARE (Django >= 1.10)
+        middleware_setting = 'MIDDLEWARE' if hasattr(s, 'MIDDLEWARE') else 'MIDDLEWARE_CLASSES'
+        middleware_list = getattr(s, middleware_setting)
+        
         # insert our middlewares after the session middleware
-        pos = s.MIDDLEWARE_CLASSES.index('django.contrib.sessions.middleware.SessionMiddleware') + 1
+        try:
+            pos = middleware_list.index('django.contrib.sessions.middleware.SessionMiddleware') + 1
+        except ValueError:
+            pos = 0  # If session middleware not found, insert at beginning
+            
         for app in ADD_TO_INSTALLED_APPS:
             if app not in s.INSTALLED_APPS:
                 s.INSTALLED_APPS.append(app)
+                
         for middleware in ADD_TO_MIDDLEWARE_CLASSES:
-            if not middleware in s.MIDDLEWARE_CLASSES:
-                s.MIDDLEWARE_CLASSES.insert(pos, middleware)
+            if middleware not in middleware_list:
+                middleware_list.insert(pos, middleware)
                 pos += 1
+        
+        # Ensure the changes are saved back to the correct attribute
+        setattr(s, middleware_setting, middleware_list)
         # add social context processors if needed.
         if self.configured_data['USE_SOCIAL_CONTEXT_PROCESSORS']:
             if hasattr(s, 'TEMPLATES'):
