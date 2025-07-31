@@ -9,13 +9,13 @@ from django.contrib.auth.models import User
 from .utils import generate_username
 
 
-user_signed_up = django.dispatch.Signal(providing_args=["user", "form"])
-user_sign_up_attempt = django.dispatch.Signal(providing_args=["username",  "email", "result"])
-signup_code_sent = django.dispatch.Signal(providing_args=["signup_code"])
-signup_code_used = django.dispatch.Signal(providing_args=["signup_code_result"])
-email_confirmed = django.dispatch.Signal(providing_args=["email_address"])
-email_confirmation_sent = django.dispatch.Signal(providing_args=["confirmation"])
-password_changed = django.dispatch.Signal(providing_args=["user"])
+user_signed_up = django.dispatch.Signal()
+user_sign_up_attempt = django.dispatch.Signal()
+signup_code_sent = django.dispatch.Signal()
+signup_code_used = django.dispatch.Signal()
+email_confirmed = django.dispatch.Signal()
+email_confirmation_sent = django.dispatch.Signal()
+password_changed = django.dispatch.Signal()
 
 
 def set_user_timezone_on_login(sender, user, request, **kwargs):
