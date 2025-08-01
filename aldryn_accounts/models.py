@@ -115,8 +115,8 @@ class SignupCode(models.Model):
 
 class SignupCodeResult(models.Model):
 
-    signup_code = models.ForeignKey(SignupCode)
-    user = models.ForeignKey(User)
+    signup_code = models.ForeignKey(SignupCode, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
 
     def save(self, **kwargs):
@@ -161,7 +161,7 @@ class EmailAddress(models.Model):
     All verified email addresses. If it's not verified it should not be here.
     """
     is_verified = True
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.EmailField(unique=True)
     verified_at = models.DateTimeField(null=True, blank=True)
     verification_method = models.CharField(max_length=255, blank=True, default='unknown')
@@ -223,7 +223,7 @@ class EmailConfirmationManager(models.Manager):
 
 
 class EmailConfirmation(models.Model):
-    user = models.ForeignKey(User, related_name="email_verifications")
+    user = models.ForeignKey(User, related_name="email_verifications", on_delete=models.CASCADE)
     email = models.EmailField()
     is_primary = models.BooleanField(default=True)
     # TODO: rename this to EmailVerification
