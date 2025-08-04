@@ -279,7 +279,7 @@ class EmailConfirmation(models.Model):
 
 
 class UserSettings(models.Model):
-    user = AutoOneToOneField(User, related_name='settings', unique=True, db_index=True)
+    user = AutoOneToOneField(User, related_name='settings', unique=True, db_index=True, on_delete=models.CASCADE)
     birth_date = models.DateField(_('birth date'), blank=True, null=True)
     timezone = timezone_field.TimeZoneField(blank=True, null=True, default=None, verbose_name=_('time zone'))
 
