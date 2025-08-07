@@ -19,7 +19,6 @@ from django.contrib import messages, auth
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core import urlresolvers
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect
@@ -398,7 +397,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
         return ctx
 
     def get_redirect_url(self):
-        return urlresolvers.reverse(settings.EMAIL_CONFIRMATION_REDIRECT_URL)
+        return reverse(settings.EMAIL_CONFIRMATION_REDIRECT_URL)
 
     def has_successfully_confirmed(self, confirmation):
         """
@@ -519,7 +518,7 @@ class CreatePasswordView(ChangePasswordBaseView):
     def dispatch(self, request, *args, **kwargs):
         if request.user.has_usable_password():
             # user who already have a password must use ChangePasswordView
-            return redirect(urlresolvers.reverse('aldryn_accounts:accounts_change_password'))
+            return redirect(reverse('aldryn_accounts:accounts_change_password'))
         else:
             return super(CreatePasswordView, self).dispatch(request, *args, **kwargs)
 
@@ -558,7 +557,7 @@ class ProfileEmailListView(OnlyOwnedObjectsMixin, ListView):
         return redirect(self.get_success_url())
 
     def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
+        return reverse('aldryn_accounts:accounts_email_list')
 
     def get_context_data(self, **kwargs):
         context = super(ProfileEmailListView, self).get_context_data(**kwargs)
@@ -595,7 +594,7 @@ class ProfileEmailConfirmationResendView(OnlyOwnedObjectsMixin, DetailView):
         return redirect(self.get_success_url())
 
     def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
+        return reverse('aldryn_accounts:accounts_email_list')
 
 
 class ProfileEmailConfirmationCancelView(OnlyOwnedObjectsMixin, DeleteView):
@@ -607,7 +606,7 @@ class ProfileEmailConfirmationCancelView(OnlyOwnedObjectsMixin, DeleteView):
         return super(ProfileEmailConfirmationCancelView, self).dispatch(*args, **kwargs)
 
     def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
+        return reverse('aldryn_accounts:accounts_email_list')
 
 
 class ProfileEmailMakePrimaryView(OnlyOwnedObjectsMixin, UpdateView):
@@ -626,7 +625,7 @@ class ProfileEmailMakePrimaryView(OnlyOwnedObjectsMixin, UpdateView):
         return MiniForm
 
     def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
+        return reverse('aldryn_accounts:accounts_email_list')
 
     def form_valid(self, form):
         self.object.set_as_primary()
@@ -642,7 +641,7 @@ class ProfileEmailDeleteView(OnlyOwnedObjectsMixin, DeleteView):
         return super(ProfileEmailDeleteView, self).dispatch(*args, **kwargs)
 
     def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_email_list')
+        return reverse('aldryn_accounts:accounts_email_list')
 
     def get_queryset(self):
         # don't allow deleting the primary email address
@@ -673,4 +672,4 @@ class UserSettingsView(UpdateView):
         return kwargs
 
     def get_success_url(self):
-        return urlresolvers.reverse('aldryn_accounts:accounts_profile')
+        return reverse('aldryn_accounts:accounts_profile')
