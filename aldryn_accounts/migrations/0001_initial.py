@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('verified_at', models.DateTimeField(null=True, blank=True)),
                 ('verification_method', models.CharField(default='unknown', max_length=255, blank=True)),
                 ('is_primary', models.BooleanField(default=False)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'email address',
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
                 ('sent_at', models.DateTimeField(null=True)),
                 ('key', models.CharField(unique=True, max_length=64)),
-                ('user', models.ForeignKey(related_name='email_verifications', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(related_name='email_verifications', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'email confirmation',
@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
                 ('sent_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
                 ('use_count', models.PositiveIntegerField(default=0, editable=False)),
-                ('invited_by', models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('invited_by', models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)),
             ],
             options={
             },
@@ -73,8 +73,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('timestamp', models.DateTimeField(default=django.utils.timezone.now)),
-                ('signup_code', models.ForeignKey(to='aldryn_accounts.SignupCode')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('signup_code', models.ForeignKey(to='aldryn_accounts.SignupCode', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -91,7 +91,7 @@ class Migration(migrations.Migration):
                 ('location_longitude', models.FloatField(default=None, null=True, blank=True)),
                 ('profile_image', models.ImageField(default='', upload_to=aldryn_accounts.utils.profile_image_upload_to, max_length=255, verbose_name='profile image', blank=True)),
                 ('preferred_language', models.CharField(default='', max_length=32, verbose_name='language', blank=True, choices=[(b'en', b'en'), (b'de', b'de')])),
-                ('user', annoying.fields.AutoOneToOneField(related_name='settings', to=settings.AUTH_USER_MODEL)),
+                ('user', annoying.fields.AutoOneToOneField(related_name='settings', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'user settings',
