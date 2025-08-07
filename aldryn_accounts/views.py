@@ -658,7 +658,7 @@ class UserSettingsView(UpdateView):
         return super(UserSettingsView, self).dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
-        if self.request.user.is_anonymous():
+        if self.request.user.is_anonymous:
             raise PermissionDenied()
         if queryset is None:
             queryset = self.get_queryset()
