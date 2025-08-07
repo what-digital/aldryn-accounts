@@ -67,5 +67,5 @@ prefix = getattr(settings, 'ALDRYN_ACCOUNTS_URLS_PREFIX', '')
 prefix = '{}/'.format(prefix) if prefix else ''
 
 urlpatterns = [
-    re_path(r'^{}'.format(prefix), include(accounts_urlpatterns, namespace='aldryn_accounts'))
+    re_path(r'^{}'.format(prefix), include((accounts_urlpatterns, 'aldryn_accounts'), namespace='aldryn_accounts')),
 ]
