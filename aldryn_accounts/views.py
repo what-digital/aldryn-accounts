@@ -392,7 +392,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
         return qs
 
     def get_context_data(self, **kwargs):
-        ctx = super(ConfirmEmailView, self).get_context_data(**kwargs)
+        ctx = {}
         ctx["confirmation"] = self.object
         return ctx
 
