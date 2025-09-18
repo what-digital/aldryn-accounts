@@ -1,8 +1,18 @@
 from setuptools import setup, find_packages
+import os
+
+# Read version from __init__.py
+def get_version():
+    init_file = os.path.join(os.path.dirname(__file__), 'aldryn_accounts', '__init__.py')
+    with open(init_file, 'r') as f:
+        for line in f:
+            if line.startswith('__version__'):
+                return line.split('=')[1].strip().strip("'\"")
+    return '0.4.0'
 
 setup(
     name='aldryn-accounts',
-    version=__import__('aldryn_accounts').__version__,
+    version=get_version(),
     url='http://github.com/aldryn/aldryn-accounts',
     license='BSD',
     platforms=['OS Independent'],
@@ -33,9 +43,9 @@ setup(
         'Development Status :: 4 - Beta',
         'Framework :: Django',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Internet :: WWW/HTTP',
     ],
+    license_files=['LICENSE'],
 )
