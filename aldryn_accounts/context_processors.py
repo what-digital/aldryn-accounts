@@ -35,7 +35,7 @@ def social_auth_info(request):
     # create accounts dictionary
     accounts = OrderedDict(zip(keys, [None] * len(keys)))
     user = request.user
-    if hasattr(user, 'is_authenticated') and user.is_authenticated():
+    if hasattr(user, 'is_authenticated') and user.is_authenticated:
         for assoc in UserSocialAuth.get_social_auth_for_user(user):
             assoc_provider = assoc.provider.replace('-', '_')
             accounts[assoc_provider] = assoc

@@ -74,7 +74,7 @@ class SignupView(FormView):
         super(SignupView, self).__init__(*args, **kwargs)
 
     def get(self, *args, **kwargs):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             return redirect(default_redirect(self.request, settings.ALDRYN_ACCOUNTS_LOGIN_REDIRECT_URL))
         if not self.is_open():
             return self.closed()
@@ -437,7 +437,7 @@ class ChangePasswordBaseView(FormView):
     }
 
     def post(self, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseForbidden()
         return super(ChangePasswordBaseView, self).post(*args, **kwargs)
 
@@ -504,7 +504,7 @@ class ChangePasswordView(ChangePasswordBaseView):
             request, *args, **kwargs)
 
     def get(self, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return redirect("accounts_password_reset_recover")
         if not self.request.user.has_usable_password():
             return redirect("accounts_create_password")
