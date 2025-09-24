@@ -48,8 +48,8 @@ class GeoIPMiddleware(object):
     def process_request(self, request):
         try:
             # Skip GeoIP lookup during signup if configured to do so
-            from .conf import settings
-            if (settings.ALDRYN_ACCOUNTS_SKIP_GEOIP_ON_SIGNUP and 
+            from django.conf import settings
+            if (getattr(settings, 'ALDRYN_ACCOUNTS_SKIP_GEOIP_ON_SIGNUP', True) and 
                 request.path_info and 'signup' in request.path_info):
                 return
                 
