@@ -54,12 +54,29 @@ def geoip(ip):
     # do nothing if geo ip is not enabled.
     if not settings.ALDRYN_ACCOUNTS_USE_GEOIP:
         return dict()
+    
+    import signal
+    
+    def timeout_handler(signum, frame):
+        raise TimeoutError("GeoIP lookup timed out")
+    
     try:
+        # Set a 3-second timeout for GeoIP lookup
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(3)
+        
         data = gi4.record_by_addr(ip)
-    except Exception:
+        
+        # Cancel the alarm
+        signal.alarm(0)
+        
+    except (Exception, TimeoutError):
         data = None
+        # Cancel the alarm in case of exception
+        signal.alarm(0)
         # we use a catch all because there's a few exceptions that could occur here.
         logger.exception("Could not fetch geo data for ip %s" % (ip, ))
+    
     if not data:  # empty dict
         return dict()
     if data.get('city') and data.get('country'):

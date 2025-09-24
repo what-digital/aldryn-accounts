@@ -69,6 +69,8 @@ class AccountsAppConf(AppConf):
     # if enabled GEOIP_PATH and GEOIP_CITY (this one defaults to
     # GeoLiteCity.dat) should be configured
     USE_GEOIP = False
+    # Skip GeoIP lookup during signup to prevent timeouts
+    SKIP_GEOIP_ON_SIGNUP = True
     LOGIN_REDIRECT_URL = '/'
     NO_REMEMBER_ME_COOKIE_AGE = 3600  # for login with 'remember me' unticked
 

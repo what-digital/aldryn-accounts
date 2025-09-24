@@ -47,20 +47,35 @@ class GeoIPMiddleware(object):
 
     def process_request(self, request):
         try:
+            # Skip GeoIP lookup during signup if configured to do so
+            from .conf import settings
+            if (settings.ALDRYN_ACCOUNTS_SKIP_GEOIP_ON_SIGNUP and 
+                request.path_info and 'signup' in request.path_info):
+                return
+                
             ip = request.META.get('HTTP_X_REAL_IP') or request.META.get('REMOTE_ADDR') or None
             # ip = '67.2.2.25'
             # ip = '99.27.181.216'  # LA
             # ip = '92.104.226.167'  # Switzerland (Stefan Home)
             # ip = '213.189.154.40'  # Switzerland (Divio)
+            
+            # Skip GeoIP lookup if no IP is available
+            if not ip:
+                return
+                
             data = geoip(ip)
-            if data is not None:
+            if data is not None and data:  # Check for non-empty dict
                 request.session['geoip'] = data
                 if not request.session.get('django_timezone') and data.get('time_zone'):
                     request.session['django_timezone'] = data.get('time_zone')
                 if (not (request.session.get('django_location') or request.session.get('django_location_name'))
-                        and data.get('pretty_name') and data.get('latitude') and data.get('longitude') or True):
+                        and data.get('pretty_name') and data.get('latitude') and data.get('longitude')):
                     request.session['django_location'] = (data.get('latitude'), data.get('longitude'),)
                     request.session['django_location_name'] = data.get('pretty_name')
-        except (KeyError, AttributeError):
-            # Handle cases where session is not properly initialized
+        except (KeyError, AttributeError, Exception) as e:
+            # Handle cases where session is not properly initialized or GeoIP fails
+            # Log the error but don't let it break the request
+            import logging
+            logger = logging.getLogger('aldryn_accounts.middleware')
+            logger.warning("GeoIP middleware failed: %s", str(e))
             pass
